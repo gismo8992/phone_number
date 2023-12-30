@@ -62,8 +62,15 @@ def write_file(file_name):
         f_writer.writeheader()
         f_writer.writerows(res)
 
-file_name = 'phone.csv'
+def copy_data(file_name, file_for_copy, line_number):
+    res = read_file(file_name)
+    with open(file_for_copy, 'a', encoding='utf-8', newline='') as copy_data:
+        f_writer = DictWriter(copy_data, fieldnames=['имя', 'фамилия', 'телефон'])
+        if line_number <= len(res):
+            f_writer.writerow(res[line_number - 1])
 
+file_name = 'phone.csv'
+file_for_copy = 'new_phone.csv'
 def main():
     while True:
         command = input("Введите команду: ")
@@ -78,7 +85,9 @@ def main():
                 print("Файл не создан. Создайте файл.")
                 continue
             print(*read_file(file_name))
-        elif command == 'c': # доделать
-            pass
+        elif command == 'c':
+            if not exists(file_for_copy):
+                create_file(file_for_copy)
+            copy_data(file_name, file_for_copy, 1)
 
 main()
